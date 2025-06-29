@@ -167,3 +167,24 @@ async function fetchQuotesFromServer() {
     alert("Error syncing with server.");
   }
 }
+async function postQuoteToServer(quoteObj) {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quoteObj)
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Quote synced to server:', data);
+    } else {
+      console.warn('Server did not accept the quote.');
+    }
+  } catch (error) {
+    console.error('Error posting quote to server:', error);
+  }
+}
+
