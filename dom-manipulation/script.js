@@ -187,4 +187,36 @@ async function postQuoteToServer(quoteObj) {
     console.error('Error posting quote to server:', error);
   }
 }
+async function syncQuotes() {
+  try {
+    // 1. Post any newly added quotes (simulate sending the latest quote)
+    const lastQuote = quotes[quotes.length - 1];
+    if (lastQuote) {
+      await postQuoteToServer(lastQuote);
+    }
+
+    // 2. Fetch latest quotes from the server
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+    const serverData = await response.json();
+
+    const serverQuotes = serverData.map(item => ({
+      text: item.title,
+      category: 'Server'
+    }));
+
+    // 3. Conflict resolution (server takes precedence)
+    const mergedQuotes = [...serverQuotes];
+    quotes = mergedQuotes;
+    saveQuotes();
+
+    // 4. Update UI
+    populateCategories();
+    showRandomQuote();
+    showSyncStatus('Quotes synced successfully.', 'green');
+
+  } catch (error) {
+    console.error('Sync failed:', error);
+    showSyncStatus('Failed to sync with server.', 'red');
+  }
+}
 
