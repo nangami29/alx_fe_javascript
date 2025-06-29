@@ -212,7 +212,7 @@ async function syncQuotes() {
     // 4. Update UI
     populateCategories();
     showRandomQuote();
-    showSyncStatus('Quotes synced successfully.', 'green');
+    showSyncStatus('Quotes synced with server!');
 
   } catch (error) {
     console.error('Sync failed:', error);
