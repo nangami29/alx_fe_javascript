@@ -19,6 +19,8 @@
     <option value="all">All Categories</option>
     <!-- Dynamically populated categories -->
   </select>
+  <button onclick="fetchQuotesFromServer()">Sync with Server</button>
+
 
    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
     <script src="script.js"></script>

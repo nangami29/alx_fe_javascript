@@ -142,3 +142,28 @@ createAddQuoteForm();
 createExportButton();
 button.addEventListener('click', showRandomQuote);
 categoryFilter.addEventListener('change', filterQuotes);
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+    const serverData = await response.json();
+
+    // Simulate quotes from server (transform fake API to quote format)
+    const serverQuotes = serverData.map(item => ({
+      text: item.title,
+      category: "Server"
+    }));
+
+    // Conflict resolution: server takes precedence
+    const updatedQuotes = [...serverQuotes];
+    localStorage.setItem('quotes', JSON.stringify(updatedQuotes));
+    quotes = updatedQuotes;
+
+    alert('Quotes synced from server and conflicts resolved.');
+    populateCategories();
+    showRandomQuote();
+
+  } catch (error) {
+    console.error("Failed to fetch from server:", error);
+    alert("Error syncing with server.");
+  }
+}
